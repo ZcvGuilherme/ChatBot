@@ -2,8 +2,9 @@ import os
 import google.generativeai as genai
 chave_api = 'AIzaSyC9dxA8gHoyVR_OgpyfRaHxdRNjTJUSyDI'
 genai.configure(api_key= chave_api)
-model = genai.GenerativeModel("gemini-1.5-flash")
-
+model = genai.GenerativeModel(
+    model_name = "gemini-1.5-flash", 
+    system_instruction= 'Você é um professor de estatística que só responde perguntas de estatística.')
 chat = model.start_chat(
     history=[
         {'role': 'user', 'parts': 'Olá'},
@@ -11,9 +12,10 @@ chat = model.start_chat(
     ]
 )
 while True:
-    response = chat.send_message(input('Você: '))
-    if response == 'fim':
-        print('Até mais!')
+    pergunta = input('Você: ')
+    response = chat.send_message(pergunta)
+    if pergunta == 'fim':
+        print(f'Prof. IA: {response.text}')
         break
     else:
-        print(response.text)
+        print(f'Prof. IA: {response.text}')
