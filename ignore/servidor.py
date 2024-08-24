@@ -26,21 +26,18 @@ print()
 auth_token = b64encode(f"{Vonage_Api_Key}:{Vonage_Api_Secret}".encode()).decode()  # Codifica as credenciais em Base64
 
 def send_message(to_number, message_text):
-    url = "https://messages-sandbox.nexmo.com/v1/messages"  # URL para enviar mensagens no ambiente de sandbox
+    url = "https://messages-sandbox.nexmo.com/v1/messages"
     headers = {
-        "Authorization": f"Basic {auth_token}",  # Usa o token de autenticação codificado em Base64
+        "Authorization": f"Basic {auth_token}",
         "Content-Type": "application/json",
         "Accept": "application/json"
     }
     data = {
-        "from": {"type": "whatsapp", "number": Vonage_Zap_Number},
-        "to": {"type": "whatsapp", "number": to_number},
-        "message": {
-            "content": {
-                "type": "text",
-                "text": message_text
-            }
-        }
+        "from": Vonage_Zap_Number,
+        "to": f"+{to_number}",
+        "channel": "Whatsapp",
+        "message_type": "text",
+        "text": message_text
     }
     response = requests.post(url, json=data, headers=headers)
     print(f"Resposta do Vonage: {response.status_code} - {response.text}")
@@ -52,7 +49,9 @@ def query_gemini(message_text):
     }
     data = {"query": message_text}
     response = requests.post(url, json=data, headers=headers)
-    return response.json().get('response', 'Desculpe, não entendi sua mensagem.')
+    response_json = response.json()
+    print(f"Resposta do Gemini: {response_json}")  # Adicione esta linha para ver a resposta completa
+    return response_json.get('response', 'Desculpe, não entendi sua mensagem.')
 
 @app.route('/webhook', methods=['POST'])
 def inbound_message():
