@@ -22,7 +22,7 @@ while True:
     pergunta = input('Você: ')
     response = chat.send_message(pergunta)
     if pergunta == 'fim':
-        print(f'Prof. IA: {response.text}')
+        print(f'Prof. IA: Encerrando o chat, até a próxima!')
         break
     else:
         print(f'Prof. IA: {response.text}')
