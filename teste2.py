@@ -71,6 +71,10 @@ class ChatBotApp(QMainWindow):
             QPushButton:hover {
                 background-color: #45a049;
             }
+            QPushButton:pressed {
+                background-color: red;
+                border: 2px solid black;
+            }
         """)
         self.botao_enviar.clicked.connect(self.enviar_pergunta)
         self.layout.addWidget(self.botao_enviar)
