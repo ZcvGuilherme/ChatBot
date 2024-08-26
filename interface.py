@@ -2,6 +2,8 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
 import main
+
+
 '''
 Explicação do setStyleSheet (Aplicável a Qualquer Widget)
 
