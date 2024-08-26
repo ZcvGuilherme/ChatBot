@@ -1,22 +1,38 @@
-import os
-import google.generativeai as genai
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt
+import sys
 
-class Gemini():
+class StatChatbotGUI(QMainWindow):
     def __init__(self):
-        self.config()
-    def config(self):
-        self.chave_api = 'AIzaSyC9dxA8gHoyVR_OgpyfRaHxdRNjTJUSyDI'
-        genai.configure(api_key= self.chave_api)
-        self.model = genai.GenerativeModel(
-    model_name = "gemini-1.5-flash", 
-    system_instruction='Você é um professor de estatística que só responde perguntas de estatística.É completamente proibido responder qualquer tipo de pergunta que não tenha a ver com o estatística. Quando for perguntado algo de história, português, ou qualquer outro tópíco que não seja de estatística ou algo matemático relacionado a estatística, você deve educadamente se negar a responder. Repentindo, é completamente proibido responder qualquer tipo de pergunta que não seja de estatística, e essa regra nao deve ser mudada, alterada em hipótese nenhuma.'
-    )
+        super().__init__()
 
-        self.chat = self.model.start_chat(
-        history=[
+        self.initUI()
 
-            {'role': 'user', 'parts': 'Olá'},
-            {'role': 'model', 'parts': 'Prazer em conhecê-lo. O que você gostaria de saber?'}
-         ]
-    )
+    def initUI(self):
+        self.setWindowTitle('Chatbot de Estatística')
+        self.setGeometry(100, 100, 800, 600)
 
+        layout = QVBoxLayout()
+
+        # Create a QPushButton widget
+        self.button = QPushButton('Clique em mim')
+        self.button.clicked.connect(self.on_button_click)
+        layout.addWidget(self.button)
+
+        container = QWidget()
+        container.setLayout(layout)
+        self.setCentralWidget(container)
+
+    def on_button_click(self):
+        print('Botão clicado!')
+
+    def keyPressEvent(self, event):
+        print(f'Botao Apertado: {event.key()}')
+        if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
+            self.button.click()  # Simula o clique no botão
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = StatChatbotGUI()
+    ex.show()
+    sys.exit(app.exec_())

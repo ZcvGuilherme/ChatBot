@@ -1,5 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+import main
 '''
 Explicação do setStyleSheet (Aplicável a Qualquer Widget)
 
@@ -60,6 +62,7 @@ class Application(QMainWindow):
         self.layout.addWidget(self.send_button)
     
     def send_message(self):
+        print('botão clicado')
         # Obtendo o texto do campo de entrada
         user_message = self.input_field.text().strip()
         
@@ -68,7 +71,7 @@ class Application(QMainWindow):
             self.chat_display.append(f"Você: {user_message}")
             
             # Aqui você chamaria a função do chatbot para obter a resposta
-            resposta = "Esta é uma resposta de exemplo do chatbot."
+            resposta = main.perg_resp(user_message)
             
             # Exibindo a resposta do chatbot
             self.chat_display.append(f"Chatbot: {resposta}")
@@ -76,7 +79,10 @@ class Application(QMainWindow):
             # Limpando o campo de entrada
             self.input_field.clear()
 
-
+    def keyPressEvent(self, event):
+        print(f'Botao Apertado: {event.key()}')
+        if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
+            self.send_button.click()
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Application()

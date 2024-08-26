@@ -23,8 +23,5 @@ chat = model.start_chat(
 
 def perg_resp(perg):
     resp = chat.send_message(perg)
-
     return resp.text
 
-pergunta = input('Você: ')
-print(perg_resp(pergunta))
