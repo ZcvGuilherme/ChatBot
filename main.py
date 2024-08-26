@@ -18,11 +18,11 @@ chat = model.start_chat(
     ]
 )
 
-while True:
-    pergunta = input('Você: ')
+
+#função que receba uma pergunta e retorne a resposta
+
+def perg_resp(perg):
     response = chat.send_message(pergunta)
-    if pergunta == 'fim':
-        print(f'Prof. IA: Encerrando o chat, até a próxima!')
-        break
-    else:
-        print(f'Prof. IA: {response.text}')
+
+    return 'Prof. IA: {response.text}'
+pergunta = input('Você: ')
