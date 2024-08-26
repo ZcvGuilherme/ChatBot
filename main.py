@@ -22,7 +22,9 @@ chat = model.start_chat(
 #função que receba uma pergunta e retorne a resposta
 
 def perg_resp(perg):
-    response = chat.send_message(pergunta)
+    resp = chat.send_message(perg)
 
-    return 'Prof. IA: {response.text}'
+    return resp.text
+
 pergunta = input('Você: ')
+print(perg_resp(pergunta))
