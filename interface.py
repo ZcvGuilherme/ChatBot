@@ -57,7 +57,7 @@ class Application(QMainWindow):
         self.setStyleSheet('''
             QLineEdit {
                 font-family: Corbel;
-                font-size: 17px
+                font-size: 17px;
             }
         ''')
         self.layout.addWidget(self.input_field)
