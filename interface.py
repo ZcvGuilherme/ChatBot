@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
-import main
+
 class Application(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -28,7 +28,15 @@ class Application(QMainWindow):
         # Widget que vai conter as mensagens
         self.chat_widget = QWidget()
         self.chat_layout = QVBoxLayout(self.chat_widget)
-        self.chat_layout.setAlignment(Qt.AlignTop)  # Alinha as mensagens no topo
+        self.chat_widget.setStyleSheet('''
+            QWidget {
+                    border: none;
+                    background-image: url('papel_parede.jpg');           
+                    background-repeat: no-repeat;
+                    background-position: center;    
+                                       }
+''')
+        self.chat_layout.setAlignment(Qt.AlignTop)  # Alinha as mensagens no topo       
         self.chat_area.setWidget(self.chat_widget)
         
         # Criando o campo de entrada de texto
@@ -75,6 +83,13 @@ class Application(QMainWindow):
             # Criando a "caixinha" da mensagem do usuário
             user_message_widget = QWidget()
             user_message_layout = QHBoxLayout(user_message_widget)
+            user_message_widget.setStyleSheet('''
+            QWidget {
+                  border: 2px solid gray;
+                  border-radius: 10px;
+                  background-color: #DCF8C6;                            
+                                              }
+''')
             user_message_layout.setContentsMargins(10, 5, 10, 5)
             
             # Estilizando a mensagem
@@ -87,11 +102,12 @@ class Application(QMainWindow):
                     border-radius: 10px;
                 }
             """)
+
             user_message_layout.addWidget(user_message_label)
             self.chat_layout.addWidget(user_message_widget)
             
             # Aqui você chamaria a função do chatbot para obter a resposta
-            resposta = main.perg_resp(user_message)
+            resposta = "Exemplo de resposta do chatbot."  # Substituir por `main.perg_resp(user_message)`
             
             # Criando a "caixinha" da mensagem do chatbot
             bot_message_widget = QWidget()
