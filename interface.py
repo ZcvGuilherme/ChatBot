@@ -1,26 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt
 import main
-'''
-Explicação do setStyleSheet (Aplicável a Qualquer Widget)
-
-    background-color: Define a cor de fundo do widget. Isso pode ser aplicado a qualquer widget, como botões (QPushButton), campos de texto (QLineEdit), áreas de texto (QTextEdit), etc.
-
-    color: Define a cor do texto exibido dentro do widget. Isso é útil para botões, campos de entrada de texto, labels (QLabel), e qualquer outro widget que contenha texto.
-
-    font-family: Define a família de fontes usada no texto do widget. Você pode aplicar isso em qualquer widget que exiba texto, como botões, campos de texto, e labels.
-
-    font-size: Define o tamanho da fonte do texto dentro do widget. Assim como font-family, pode ser aplicado a qualquer widget que contenha texto.
-
-    border: Define a borda ao redor do widget. Isso pode ser usado em botões, campos de texto, áreas de texto, entre outros, para dar destaque ou melhorar o design do widget.
-
-    border-radius: Define os cantos arredondados da borda do widget. Isso é útil em qualquer widget, especialmente botões e campos de texto, para criar uma aparência mais suave e moderna.
-
-    padding: Define o espaçamento interno dentro do widget, criando espaço entre o conteúdo (como texto) e a borda do widget. Isso é aplicável a botões, campos de texto, e áreas de texto para melhorar a legibilidade e a estética.'''
-        
-
-
 class Application(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -39,21 +20,16 @@ class Application(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         
         # Criando a área de exibição de mensagens
-        self.chat_display = QTextEdit(self)
-        self.chat_display.setReadOnly(True)
-        self.chat_display.setStyleSheet("""
-            QTextEdit {
-                color: darkblue;
-                font: 20px 'Times New Roman';
-                border: 2px solid gray;
-                border-radius: 10px;
-                padding: 10px;
-                background-image: url('papel_parede.jpg');
-                background-repeat: no-repeat;
-                background-position: center;
-            }
-        """)
-        self.layout.addWidget(self.chat_display)
+        self.chat_area = QScrollArea(self)
+        self.chat_area.setWidgetResizable(True)
+        self.chat_area.setStyleSheet("background-color: LightCyan;")
+        self.layout.addWidget(self.chat_area)
+        
+        # Widget que vai conter as mensagens
+        self.chat_widget = QWidget()
+        self.chat_layout = QVBoxLayout(self.chat_widget)
+        self.chat_layout.setAlignment(Qt.AlignTop)  # Alinha as mensagens no topo
+        self.chat_area.setWidget(self.chat_widget)
         
         # Criando o campo de entrada de texto
         self.input_field = QLineEdit(self)
@@ -92,27 +68,56 @@ class Application(QMainWindow):
         self.layout.addWidget(self.send_button)
     
     def send_message(self):
-        print('botão clicado')
         # Obtendo o texto do campo de entrada
         user_message = self.input_field.text().strip()
         
         if user_message:
-            # Exibindo a mensagem do usuário na área de exibição
-            self.chat_display.append(f"Você: {user_message}")
+            # Criando a "caixinha" da mensagem do usuário
+            user_message_widget = QWidget()
+            user_message_layout = QHBoxLayout(user_message_widget)
+            user_message_layout.setContentsMargins(10, 5, 10, 5)
+            
+            # Estilizando a mensagem
+            user_message_label = QLabel(f"Você: {user_message}")
+            user_message_label.setStyleSheet("""
+                QLabel {
+                    background-color: #DCF8C6;
+                    color: black;
+                    padding: 10px;
+                    border-radius: 10px;
+                }
+            """)
+            user_message_layout.addWidget(user_message_label)
+            self.chat_layout.addWidget(user_message_widget)
             
             # Aqui você chamaria a função do chatbot para obter a resposta
             resposta = main.perg_resp(user_message)
             
-            # Exibindo a resposta do chatbot
-            self.chat_display.append(f"MárcioBot: {resposta}")
+            # Criando a "caixinha" da mensagem do chatbot
+            bot_message_widget = QWidget()
+            bot_message_layout = QHBoxLayout(bot_message_widget)
+            bot_message_layout.setContentsMargins(10, 5, 10, 5)
+            
+            # Estilizando a mensagem do chatbot
+            bot_message_label = QLabel(f"Chatbot: {resposta}")
+            bot_message_label.setStyleSheet("""
+                QLabel {
+                    background-color: #FFFFFF;
+                    color: black;
+                    padding: 10px;
+                    border-radius: 10px;
+                }
+            """)
+            bot_message_layout.addWidget(bot_message_label)
+            self.chat_layout.addWidget(bot_message_widget)
             
             # Limpando o campo de entrada
             self.input_field.clear()
 
     def keyPressEvent(self, event):
-        print(f'Botao Apertado: {event.key()}')
         if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
             self.send_button.click()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Application()
