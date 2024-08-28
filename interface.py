@@ -44,11 +44,11 @@ class Application(QMainWindow):
         self.chat_display.setStyleSheet("""
             QTextEdit {
                 color: darkblue;
-                font: 16px 'Times New Roman';
+                font: 20px 'Times New Roman';
                 border: 2px solid gray;
                 border-radius: 10px;
                 padding: 10px;
-                background-image: url('');
+                background-image: url('papel_parede.jpg');
                 background-repeat: no-repeat;
                 background-position: center;
             }
