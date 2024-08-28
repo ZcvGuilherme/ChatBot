@@ -44,8 +44,6 @@ class Application(QMainWindow):
         self.chat_display.setStyleSheet("""
             QTextEdit {
                 background-color: LightCyan;
-                color: darkblue;
-                font: 16px 'Times New Roman';
                 border: 2px solid gray;
                 border-radius: 10px;
                 padding: 10px;
