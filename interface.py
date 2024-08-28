@@ -50,6 +50,7 @@ class Application(QMainWindow):
                 border-radius: 10px;
                 padding: 10px;
             }
+            
         """)
         self.layout.addWidget(self.chat_display)
         
@@ -63,7 +64,7 @@ class Application(QMainWindow):
                 font: bold 17px;
                 padding: 10px;
                 background-color: #ffffff;
-            }
+            }            
         ''')
         self.layout.addWidget(self.input_field)
         
