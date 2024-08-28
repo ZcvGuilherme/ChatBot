@@ -73,7 +73,7 @@ class Application(QMainWindow):
         self.send_button.setStyleSheet('''
             QPushButton {
                 border: 2px solid #3CB371;
-                background-color: #4CAF50;
+                background-color: #2E8B57;
                 color: white;
                 font: 15px;
                 border-radius: 10px;
