@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 import main
 '''
 Explicação do setStyleSheet (Aplicável a Qualquer Widget)
@@ -30,6 +30,7 @@ class Application(QMainWindow):
     def Config_Tela(self):
         self.setWindowTitle('ChatMárcio')
         self.setGeometry(100, 100, 500, 600)
+        self.setMinimumSize(500, 600)
 
     def Criar_Widgets(self):
         # Definindo o widget central e o layout principal
@@ -40,13 +41,14 @@ class Application(QMainWindow):
         # Criando a área de exibição de mensagens
         self.chat_display = QTextEdit(self)
         self.chat_display.setReadOnly(True)
-       
-        self.setStyleSheet("""
+        self.chat_display.setStyleSheet("""
             QTextEdit {
-                border: 1px solid gray;
+                background-color: LightCyan;
+                color: darkblue;
+                font: 16px 'Times New Roman';
+                border: 2px solid gray;
                 border-radius: 10px;
                 padding: 10px;
-                background-color: #f5f5f5;
             }
         """)
         self.layout.addWidget(self.chat_display)
@@ -54,10 +56,13 @@ class Application(QMainWindow):
         # Criando o campo de entrada de texto
         self.input_field = QLineEdit(self)
         self.input_field.setPlaceholderText("Digite sua pergunta...")
-        self.setStyleSheet('''
+        self.input_field.setStyleSheet('''
             QLineEdit {
-                font-family: Corbel;
-                font-size: 17px;
+                border: 1px solid gray;
+                border-radius: 10px;
+                font: bold 17px;
+                padding: 10px;
+                background-color: #ffffff;
             }
         ''')
         self.layout.addWidget(self.input_field)
@@ -65,7 +70,23 @@ class Application(QMainWindow):
         # Criando o botão de enviar
         self.send_button = QPushButton("Enviar", self)
         self.send_button.clicked.connect(self.send_message)
-        #coloque aqui
+        self.send_button.setStyleSheet('''
+            QPushButton {
+                border: 2px solid #3CB371;
+                background-color: #4CAF50;
+                color: white;
+                font: 15px;
+                border-radius: 10px;
+                padding: 10px 20px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+                border: 2px solid #45a049;
+            }
+            QPushButton:pressed {
+                background-color: #3CB371;
+            }
+        ''')
         self.layout.addWidget(self.send_button)
     
     def send_message(self):
