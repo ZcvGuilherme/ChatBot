@@ -43,14 +43,15 @@ class Application(QMainWindow):
         self.chat_display.setReadOnly(True)
         self.chat_display.setStyleSheet("""
             QTextEdit {
-                background-color: LightCyan;
                 color: darkblue;
                 font: 16px 'Times New Roman';
                 border: 2px solid gray;
                 border-radius: 10px;
                 padding: 10px;
+                background-image: url('');
+                background-repeat: no-repeat;
+                background-position: center;
             }
-            
         """)
         self.layout.addWidget(self.chat_display)
         
@@ -103,7 +104,7 @@ class Application(QMainWindow):
             resposta = main.perg_resp(user_message)
             
             # Exibindo a resposta do chatbot
-            self.chat_display.append(f"Chatbot: {resposta}")
+            self.chat_display.append(f"MárcioBot: {resposta}")
             
             # Limpando o campo de entrada
             self.input_field.clear()
