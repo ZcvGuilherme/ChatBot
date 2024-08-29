@@ -12,6 +12,7 @@ class Application(QMainWindow):
         self.setWindowTitle('ChatMárcio')
         self.setGeometry(100, 100, 500, 600)
         self.setMinimumSize(500, 600)
+        self.setMaximumSize(500, 600)
 
     def Criar_Widgets(self):
         # Definindo o widget central e o layout principal
@@ -30,10 +31,8 @@ class Application(QMainWindow):
         self.chat_layout = QVBoxLayout(self.chat_widget)
         self.chat_widget.setStyleSheet('''
             QWidget {
-                    border: none;
-                    background-image: url('papel_parede.jpg');           
-                    background-repeat: no-repeat;
-                    background-position: center;    
+                    border-radius: 10px;
+                    background-color: #B0C4DE;    
                                        }
 ''')
         self.chat_layout.setAlignment(Qt.AlignTop)  # Alinha as mensagens no topo       
@@ -85,9 +84,10 @@ class Application(QMainWindow):
             user_message_layout = QHBoxLayout(user_message_widget)
             user_message_widget.setStyleSheet('''
             QWidget {
-                  border: 2px solid gray;
-                  border-radius: 10px;
-                  background-color: #DCF8C6;                            
+                border: 1px solid gray;
+                border-radius: 10px;
+                background-color: #DCF8C6;        
+                padding: 10px;                    
                                               }
 ''')
             user_message_layout.setContentsMargins(10, 5, 10, 5)
@@ -96,6 +96,7 @@ class Application(QMainWindow):
             user_message_label = QLabel(f"Você: {user_message}")
             user_message_label.setStyleSheet("""
                 QLabel {
+                    border: 1px solid #DCF8C0;
                     background-color: #DCF8C6;
                     color: black;
                     padding: 10px;
@@ -112,16 +113,25 @@ class Application(QMainWindow):
             # Criando a "caixinha" da mensagem do chatbot
             bot_message_widget = QWidget()
             bot_message_layout = QHBoxLayout(bot_message_widget)
+            bot_message_widget.setStyleSheet('''
+            QWidget {
+                border: 1px solid black;
+                border-radius: 10px;
+                background-color: #F4A460;        
+                padding: 10px;                    
+                                              }
+''')
             bot_message_layout.setContentsMargins(10, 5, 10, 5)
             
             # Estilizando a mensagem do chatbot
             bot_message_label = QLabel(f"Chatbot: {resposta}")
             bot_message_label.setStyleSheet("""
                 QLabel {
-                    background-color: #FFFFFF;
+                    background-color: #F4A460;
                     color: black;
                     padding: 10px;
                     border-radius: 10px;
+                    border: 1px solid #F4A460;
                 }
             """)
             bot_message_layout.addWidget(bot_message_label)
