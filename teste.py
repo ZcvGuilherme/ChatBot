@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
+import main
 
 class Application(QMainWindow):
     def __init__(self):
@@ -12,7 +13,8 @@ class Application(QMainWindow):
         self.setWindowTitle('ChatMárcio')
         self.setGeometry(100, 100, 500, 600)
         self.setMinimumSize(500, 600)
-
+        self.setMaximumSize(500, 600)
+        
     def Criar_Widgets(self):
         # Definindo o widget central e o layout principal
         self.central_widget = QWidget()
@@ -23,12 +25,20 @@ class Application(QMainWindow):
         self.chat_area = QScrollArea(self)
         self.chat_area.setWidgetResizable(True)
         self.chat_area.setStyleSheet("background-color: LightCyan;")
+        self.chat_area.setMaximumSize(500, 600)
         self.layout.addWidget(self.chat_area)
         
         # Widget que vai conter as mensagens
         self.chat_widget = QWidget()
+        self.chat_widget.setMaximumWidth(450)
         self.chat_layout = QVBoxLayout(self.chat_widget)
-        self.chat_layout.setAlignment(Qt.AlignTop)  # Alinha as mensagens no topo
+        self.chat_widget.setStyleSheet('''
+            QWidget {
+                    border: 1px solid gray
+                    border-radius: 10px; 
+                                       }
+''')
+        self.chat_layout.setAlignment(Qt.AlignTop)  # Alinha as mensagens no topo       
         self.chat_area.setWidget(self.chat_widget)
         
         # Criando o campo de entrada de texto
@@ -68,51 +78,44 @@ class Application(QMainWindow):
         self.layout.addWidget(self.send_button)
     
     def send_message(self):
-        # Obtendo o texto do campo de entrada
+    # Obtendo o texto do campo de entrada
         user_message = self.input_field.text().strip()
         
         if user_message:
-            # Criando a "caixinha" da mensagem do usuário
-            user_message_widget = QWidget()
-            user_message_layout = QHBoxLayout(user_message_widget)
-            user_message_layout.setContentsMargins(10, 5, 10, 5)
-            
-            # Estilizando a mensagem
+            # Estilizando e exibindo a mensagem do usuário
             user_message_label = QLabel(f"Você: {user_message}")
-            user_message_label.setStyleSheet("""
+            user_message_label.setStyleSheet('''
                 QLabel {
+                    border: 1px solid gray;
+                    border-radius: 10px;
                     background-color: #DCF8C6;
                     color: black;
                     padding: 10px;
-                    border-radius: 10px;
+                    margin: 5px;
                 }
-            """)
-            user_message_layout.addWidget(user_message_label)
-            self.chat_layout.addWidget(user_message_widget)
+            ''')
+            self.chat_layout.addWidget(user_message_label, alignment=Qt.AlignRight)
             
             # Aqui você chamaria a função do chatbot para obter a resposta
-            resposta = "Exemplo de resposta do chatbot."  # Substituir por `main.perg_resp(user_message)`
+            resposta = main.perg_resp(user_message)  # Substituir por `main.perg_resp(user_message)`
             
-            # Criando a "caixinha" da mensagem do chatbot
-            bot_message_widget = QWidget()
-            bot_message_layout = QHBoxLayout(bot_message_widget)
-            bot_message_layout.setContentsMargins(10, 5, 10, 5)
-            
-            # Estilizando a mensagem do chatbot
+            # Estilizando e exibindo a mensagem do chatbot
             bot_message_label = QLabel(f"Chatbot: {resposta}")
-            bot_message_label.setStyleSheet("""
+            bot_message_label.setStyleSheet('''
                 QLabel {
-                    background-color: #FFFFFF;
+                    border: 1px solid black;
+                    border-radius: 10px;
+                    background-color: #F4A460;
                     color: black;
                     padding: 10px;
-                    border-radius: 10px;
+                    margin: 5px;
                 }
-            """)
-            bot_message_layout.addWidget(bot_message_label)
-            self.chat_layout.addWidget(bot_message_widget)
+            ''')
+            self.chat_layout.addWidget(bot_message_label, alignment=Qt.AlignLeft)
             
             # Limpando o campo de entrada
             self.input_field.clear()
+
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:

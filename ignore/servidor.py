@@ -54,6 +54,7 @@ def query_gemini(message_text):
     return response_json.get('response', 'Desculpe, não entendi sua mensagem.')
 
 @app.route('/webhook', methods=['POST'])
+
 def inbound_message():
     try:
         data = request.json
