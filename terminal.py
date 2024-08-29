@@ -1,3 +1,5 @@
+import markdown2
+
 import os
 import google.generativeai as genai
 
@@ -18,11 +20,22 @@ chat = model.start_chat(
     ]
 )
 
+# Loop principal do chat
 while True:
-    pergunta = input('Você: ')
-    response = chat.send_message(pergunta)
+    pergunta = input("Você: ")
     if pergunta == 'fim':
-        print(f'Prof. IA: Encerrando o chat, até a próxima!')
+        print(f"Prof. IA: Encerrando o chat, até a próxima!")
         break
-    else:
-        print(f'Prof. IA: {response.text}')
+#
+#    try:
+#        response = chat.send_message(pergunta)
+#        print(f"Prof. IA: {response.text}")
+#    except Exception as e:
+#        print(f"Ocorreu um erro: {e}")
+    try:
+        response = chat.send_message(pergunta)
+    # Convertendo a resposta para HTML usando Markdown
+        html_output = markdown2.markdown(response.text)
+        print(f"Prof. IA: {html_output}")
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
