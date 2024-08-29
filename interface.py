@@ -1,3 +1,4 @@
+import markdown2
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
@@ -80,9 +81,12 @@ class Application(QMainWindow):
             
             # Aqui você chamaria a função do chatbot para obter a resposta
             resposta = main.perg_resp(user_message)
+
+            # Depois converteria em html
+            html_output = markdown2.markdown(resposta)
             
             # Exibindo a resposta do chatbot
-            self.chat_display.append(f"Chatbot: {resposta}")
+            self.chat_display.append(f"Chatbot: {html_output}")
             
             # Limpando o campo de entrada
             self.input_field.clear()
