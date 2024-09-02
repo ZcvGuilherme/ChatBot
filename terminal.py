@@ -35,6 +35,7 @@ while True:
     try:
         response = chat.send_message(pergunta)
     # Convertendo a resposta para HTML usando Markdown
+    
         html_output = markdown2.markdown(response.text)
         print(f"Prof. IA: {html_output}")
     except Exception as e:

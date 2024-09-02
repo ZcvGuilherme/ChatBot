@@ -1,3 +1,4 @@
+import markdown2
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
@@ -99,8 +100,10 @@ class Application(QMainWindow):
             # Aqui você chamaria a função do chatbot para obter a resposta
             resposta = main.perg_resp(user_message)  # Substituir por `main.perg_resp(user_message)`
             
-            # Estilizando e exibindo a mensagem do chatbot
-            bot_message_label = QLabel(f"Chatbot: {resposta}")
+            # Estilizando e exibindo a mensagem do chatbot e convertendo a resposta para HTML usando Markdown
+
+            html_output = markdown2.markdown(f"Chatbot: {resposta}")
+            bot_message_label = QLabel(html_output)
             bot_message_label.setStyleSheet('''
                 QLabel {
                     border: 1px solid black;
