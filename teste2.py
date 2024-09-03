@@ -1,104 +1,137 @@
+import markdown2
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QLineEdit, QPushButton, QVBoxLayout, QWidget
-from PyQt5.QtGui import QTextCursor, QFont
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
-import google.generativeai as genai
+from PyQt5.QtGui import QIcon
+import main
 
-# Configuração da API da I.A.
-chave_api = 'AIzaSyC9dxA8gHoyVR_OgpyfRaHxdRNjTJUSyDI'
-genai.configure(api_key=chave_api)
-
-def criar_modelo():
-    return genai.GenerativeModel(
-        model_name="gemini-1.5-flash", 
-        system_instruction='Você é um professor de estatística que só responde perguntas de estatística e não deve responder perguntas fora desse contexto.'
-    )
-
-def iniciar_chat(modelo):
-    return modelo.start_chat()
-
-class ChatBotApp(QMainWindow):
+class Application(QMainWindow):
     def __init__(self):
         super().__init__()
-
-        self.model = criar_modelo()
-        self.chat = iniciar_chat(self.model)
-
-        self.setWindowTitle("Chat com IA")
+        self.Config_Tela()
+        self.Criar_Widgets()
+    
+    def Config_Tela(self):
+        self.setWindowTitle('ChatMárcio')
         self.setGeometry(100, 100, 500, 600)
+        self.setMinimumSize(500, 600)
+        self.setMaximumSize(500, 600)
+        self.setWindowIcon(QIcon('do-utilizador.png'))
 
+    def Criar_Widgets(self):
+        # Definindo o widget central e o layout principal
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
         self.layout = QVBoxLayout(self.central_widget)
-
-        # Caixa de texto para histórico com bordas arredondadas e fonte maior
-        self.historico = QTextEdit(self)
-        self.historico.setReadOnly(True)
-        self.historico.setFont(QFont('Arial', 12))
-        self.historico.setStyleSheet("""
-            QTextEdit {
-                border: 1px solid gray;
-                border-radius: 10px;
-                padding: 10px;
-                background-color: #f5f5f5;
-            }
-        """)
-        self.layout.addWidget(self.historico)
-
-        # Caixa de entrada de texto
-        self.entrada = QLineEdit(self)
-        self.entrada.setFont(QFont('Arial', 14))
-        self.entrada.setStyleSheet("""
+        
+        # Criando a área de exibição de mensagens
+        self.chat_area = QScrollArea(self)
+        self.chat_area.setWidgetResizable(True)
+        self.chat_area.setStyleSheet("background-color: LightCyan;")
+        self.chat_area.setMaximumSize(500, 900)
+        self.layout.addWidget(self.chat_area)
+        
+        # Widget que vai conter as mensagens
+        self.chat_widget = QWidget()
+        self.chat_widget.setMaximumWidth(450)
+        self.chat_layout = QVBoxLayout(self.chat_widget)
+        self.chat_widget.setStyleSheet('''
+            QWidget {
+                    border: 1px solid gray
+                    border-radius: 10px; 
+                                       }
+        ''')
+        self.chat_layout.setAlignment(Qt.AlignTop)  # Alinha as mensagens no topo       
+        self.chat_area.setWidget(self.chat_widget)
+        
+        # Criando o campo de entrada de texto
+        self.input_field = QLineEdit(self)
+        self.input_field.setPlaceholderText("Digite sua pergunta...")
+        self.input_field.setStyleSheet('''
             QLineEdit {
                 border: 1px solid gray;
                 border-radius: 10px;
+                font: bold 17px;
                 padding: 10px;
                 background-color: #ffffff;
-            }
-        """)
-        self.layout.addWidget(self.entrada)
-
-        # Botão de envio
-        self.botao_enviar = QPushButton("Enviar", self)
-        self.botao_enviar.setFont(QFont('Arial', 12))
-        self.botao_enviar.setStyleSheet("""
+            }            
+        ''')
+        self.layout.addWidget(self.input_field)
+        
+        # Criando o botão de enviar
+        self.send_button = QPushButton("Enviar", self)
+        self.send_button.clicked.connect(self.send_message)
+        self.send_button.setStyleSheet('''
             QPushButton {
-                background-color: #4CAF50;
+                border: 2px solid #3CB371;
+                background-color: #2E8B57;
                 color: white;
+                font: 15px;
                 border-radius: 10px;
                 padding: 10px 20px;
             }
             QPushButton:hover {
                 background-color: #45a049;
+                border: 2px solid #45a049;
             }
             QPushButton:pressed {
-                background-color: red;
-                border: 2px solid black;
+                background-color: #3CB371;
             }
-        """)
-        self.botao_enviar.clicked.connect(self.enviar_pergunta)
-        self.layout.addWidget(self.botao_enviar)
-
-    def enviar_pergunta(self):
-        pergunta = self.entrada.text()
-        if pergunta.lower() in ['fim', 'exit', 'quit']:
-            sys.exit()
-
-        resposta = self.chat.send_message(pergunta)
-        response_text = resposta.candidates[0].content.parts[0].text
-
-        # Estilo para texto do usuário (direita) e da IA (esquerda)
-        self.historico.setAlignment(Qt.AlignRight)
-        self.historico.append(f"Você: {pergunta}")
-        self.historico.setAlignment(Qt.AlignLeft)
-        self.historico.append(f"IA: {response_text}\n")
+        ''')
+        self.layout.addWidget(self.send_button)
+    
+    def send_message(self):
+    # Obtendo o texto do campo de entrada
+        user_message = self.input_field.text().strip()
         
-        # Movendo o cursor para o fim para rolar automaticamente
-        self.historico.moveCursor(QTextCursor.End)
-        self.entrada.clear()
+        if user_message:
+            # Estilizando e exibindo a mensagem do usuário
+            user_message_label = QLabel(f"Você: {user_message}", self)
+            user_message_label.setStyleSheet('''
+                QLabel {
+                    border: 1px solid gray;
+                    border-radius: 10px;
+                    background-color: #DCF8C6;
+                    color: black;
+                    padding: 10px;
+                    margin: 5px;
+                }
+            ''')
+            user_message_label.setWordWrap(True)
+            user_message_label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+            user_message_label.adjustSize()
+            self.chat_layout.addWidget(user_message_label, alignment=Qt.AlignRight)
 
-# Inicia a aplicação
-app = QApplication(sys.argv)
-janela = ChatBotApp()
-janela.show()
-sys.exit(app.exec_())
+            # Aqui você chamaria a função do chatbot para obter a resposta
+            resposta = main.perg_resp(user_message)  
+            
+            # Estilizando e exibindo a mensagem do chatbot
+            html_output = markdown2.markdown(f"ChatMárcio: {resposta}")
+            bot_message_label = QLabel(html_output, self)
+            bot_message_label.setStyleSheet('''
+                QLabel {
+                    border: 1px solid black;
+                    border-radius: 10px;
+                    background-color: #E6E6FA;
+                    color: black;
+                    padding: 10px;
+                    margin: 5px;
+                }
+            ''')
+            bot_message_label.setWordWrap(True)
+            bot_message_label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+            bot_message_label.adjustSize()
+            self.chat_layout.addWidget(bot_message_label, alignment=Qt.AlignLeft)
+
+            # Limpando o campo de entrada
+            self.input_field.clear()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
+            self.send_button.click()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = Application()
+    window.show()
+    sys.exit(app.exec_())
