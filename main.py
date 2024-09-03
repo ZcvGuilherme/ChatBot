@@ -1,8 +1,8 @@
 import os
 import google.generativeai as genai
-
-
-chave_api = 'AIzaSyC9dxA8gHoyVR_OgpyfRaHxdRNjTJUSyDI'
+from dotenv import load_dotenv
+load_dotenv()
+chave_api = os.getenv("GEMINI_API_KEY")
 
 genai.configure(api_key= chave_api)
 
