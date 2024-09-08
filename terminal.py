@@ -1,8 +1,10 @@
-import markdown2
 import os
 import google.generativeai as genai
+from rich.console import Console
+from rich.markdown import Markdown
 from dotenv import load_dotenv
 load_dotenv()
+
 chave_api = os.getenv("GEMINI_API_KEY")
 
 genai.configure(api_key= chave_api)
@@ -19,7 +21,7 @@ chat = model.start_chat(
         {'role': 'model', 'parts': 'Prazer em conhecê-lo. O que você gostaria de saber?'}
     ]
 )
-
+console = Console()
 # Loop principal do chat
 while True:
     pergunta = input("Você: ")
@@ -29,9 +31,8 @@ while True:
 
     try:
         response = chat.send_message(pergunta)
-    # Convertendo a resposta para HTML usando Markdown
-    
-        html_output = markdown2.markdown(response.text)
-        print(f"Prof. IA: {html_output}")
+        mark_response = Markdown(response.text)
+        console.print(mark_response)
+        # print(f"Prof. IA: {response.text}")
     except Exception as e:
         print(f"Ocorreu um erro: {e}")

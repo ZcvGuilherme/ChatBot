@@ -18,9 +18,7 @@ chat = model.start_chat(
     ]
 )
 
-
 #função que receba uma pergunta e retorne a resposta
-
 def perg_resp(perg):
     resp = chat.send_message(perg)
     return resp.text

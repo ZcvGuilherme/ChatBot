@@ -12,7 +12,7 @@ class Application(QMainWindow):
         self.Criar_Widgets()
     
     def Config_Tela(self):
-        self.setWindowTitle('ChatMárcio')
+        self.setWindowTitle('ChatBot')
         self.setGeometry(100, 100, 500, 600)
         self.setMinimumSize(500, 600)
         self.setMaximumSize(500, 600)
@@ -92,14 +92,12 @@ class Application(QMainWindow):
                     border: 1px solid gray;
                     border-radius: 10px;
                     background-color: #DCF8C6;
-                    font: 14px;
                     color: black;
+                    font: 14px 'Arial';
                     padding: 10px;
                     margin: 5px;
                 }
             ''')
-
-            user_message_label.setWordWrap(True)
             self.chat_layout.addWidget(user_message_label, alignment=Qt.AlignRight)
             
             # Aqui você chamaria a função do chatbot para obter a resposta
@@ -107,7 +105,7 @@ class Application(QMainWindow):
             
             # Estilizando e exibindo a mensagem do chatbot e convertendo a resposta para HTML usando Markdown
 
-            html_output = markdown2.markdown(f"**ChatMárcio**: {resposta}")
+            html_output = markdown2.markdown(f"**ChatBot**: {resposta}")
             bot_message_label = QLabel(html_output)
             bot_message_label.setStyleSheet('''
                 QLabel {
@@ -120,7 +118,7 @@ class Application(QMainWindow):
                 }
             ''')
             bot_message_label.setWordWrap(True)
-            bot_message_label.setMinimumWidth(300)
+            bot_message_label.setMinimumWidth(400)
             bot_message_label.setMinimumHeight(80)
             bot_message_label.setMaximumWidth(400)
             self.chat_layout.addWidget(bot_message_label, alignment=Qt.AlignLeft)
