@@ -101,7 +101,11 @@ class Application(QMainWindow):
             self.chat_layout.addWidget(user_message_label, alignment=Qt.AlignRight)
             
             # Aqui você chamaria a função do chatbot para obter a resposta
-            resposta = main.perg_resp(user_message)  
+            try:
+                resposta = main.perg_resp(user_message)
+            except Exception as e:
+                resposta = f"Erro ao gerar resposta: {e}"
+
             
             # Estilizando e exibindo a mensagem do chatbot e convertendo a resposta para HTML usando Markdown
 
@@ -122,7 +126,8 @@ class Application(QMainWindow):
             bot_message_label.setMinimumHeight(80)
             bot_message_label.setMaximumWidth(400)
             self.chat_layout.addWidget(bot_message_label, alignment=Qt.AlignLeft)
-            
+            self.chat_area.verticalScrollBar().setValue(self.chat_area.verticalScrollBar().maximum())
+
             # Limpando o campo de entrada
             self.input_field.clear()
 
